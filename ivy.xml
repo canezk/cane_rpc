@@ -1,0 +1,48 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one
+   or more contributor license agreements.  See the NOTICE file
+   distributed with this work for additional information
+   regarding copyright ownership.  The ASF licenses this file
+   to you under the Apache License, Version 2.0 (the
+   "License"); you may not use this file except in compliance
+   with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing,
+   software distributed under the License is distributed on an
+   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+   KIND, either express or implied.  See the License for the
+   specific language governing permissions and limitations
+   under the License.    
+-->
+<ivy-module version="2.0">
+    <info organisation="org.apache" module="clawtool"/>
+    <configurations>
+        <conf name="api"  description="application interface"/>        
+    </configurations>
+    <dependencies>        
+        <!--spring jars-->  
+		<dependency org="org.springframework" name="spring-core" rev="4.0.3.RELEASE" conf="api->default,sources"/>
+        <dependency org="org.springframework" name="spring-test" rev="4.0.3.RELEASE" conf="api->default,sources"/>
+        <dependency org="org.springframework" name="spring-beans" rev="4.0.3.RELEASE" conf="api->default,sources"/>
+        <dependency org="org.springframework" name="spring-jdbc" rev="4.0.3.RELEASE" conf="api->default,sources"/>
+        <dependency org="org.springframework" name="spring-web" rev="4.0.3.RELEASE" conf="api->default,sources"/>
+  		<dependency org="org.springframework" name="spring-webmvc" rev="4.0.3.RELEASE" conf="api->default,sources"/>
+        <dependency org="org.springframework" name="spring-context" rev="4.0.3.RELEASE" conf="api->default,sources"/>
+  		<dependency org="org.springframework" name="spring-context-support" rev="4.0.3.RELEASE" conf="api->default,sources"/>
+  		<dependency org="org.springframework" name="spring-aop" rev="4.0.3.RELEASE" conf="api->default,sources"/>
+        <dependency org="org.springframework.security" name="spring-security-config" rev="3.2.3.RELEASE" conf="api->default,sources"/>
+        <dependency org="org.springframework.security" name="spring-security-web" rev="3.2.3.RELEASE" conf="api->default,sources"/>
+        
+        <!--junit test-->
+        <dependency org="junit" name="junit" rev="4.11" />
+        
+        <!-- netty -->
+        <dependency org="io.netty" name="netty-all" rev="4.0.24.Final" />   
+        
+        <!-- zookeeper -->        
+        <dependency org="org.apache.zookeeper" name="zookeeper" rev="3.4.6" conf="api->master"/>     
+        
+    </dependencies>
+</ivy-module>
