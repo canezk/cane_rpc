@@ -4,7 +4,7 @@
  * Copyright 2016 Yodao, Inc. All rights reserved.
  * YODAO PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
-package com.cane.rpc.server;
+package java.main;
 
 /**
  * Base interface for all server implementation
