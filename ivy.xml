@@ -42,7 +42,10 @@
         <dependency org="io.netty" name="netty" rev="3.10.5.Final" />   
         
         <!-- zookeeper -->        
-        <dependency org="org.apache.zookeeper" name="zookeeper" rev="3.4.6" conf="api->master"/>     
+        <dependency org="org.apache.zookeeper" name="zookeeper" rev="3.4.6" conf="api->master"/> 
+        
+        <!-- log4j -->        
+        <dependency org="log4j" name="log4j" rev="1.2.+" />    
         
     </dependencies>
 </ivy-module>
