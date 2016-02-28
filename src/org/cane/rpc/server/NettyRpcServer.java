@@ -6,9 +6,18 @@
  */
 package org.cane.rpc.server;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.net.Socket;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+
 
 /**
  * Server implemented by netty.
@@ -16,12 +25,35 @@ import java.util.Map;
  *
  */
 public class NettyRpcServer extends RpcServer{
+    private static final Log LOG = LogFactory.getLog(NettyRpcServer.class);
+    
+    private EventLoopGroup bossGroup;
+    private EventLoopGroup workGroup;
 
-    private Map<Class<?>, List<Object>> proxy_objects = new HashMap<Class<?>, List<Object>>();
+    public NettyRpcServer(String serverAddress) {
+        this.serverAddress = serverAddress;
+    }
     
     @Override
     public void start() {
-        
+        bossGroup = new NioEventLoopGroup();
+        workGroup = new NioEventLoopGroup();
+        try {
+            ServerBootstrap serverBootstrap = new ServerBootstrap();
+            serverBootstrap.group(bossGroup, workGroup);
+            serverBootstrap.channel(NioServerSocketChannel.class);
+            serverBootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
+                @Override
+                public void initChannel(SocketChannel channel) throws Exception {
+                    channel.pipeline().addLast(null);
+                    //TODO
+                }
+            });
+            String[] hostAndPort = serverAddress.split(":");
+            serverBootstrap.bind(hostAndPort[0], Integer.parseInt(hostAndPort[1]));
+        } catch(Exception e) {
+            LOG.error("Init rpc server error!", e);
+        }
     }
     
     @Override

@@ -6,6 +6,9 @@
  */
 package org.cane.rpc.server;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Factory class for rpc server.
  * @author zhoukang
@@ -19,10 +22,14 @@ public class RpcServerFactory {
      * @param rpcServerClass
      * @return
      */
-    public RpcServer getRpcServer(String serverAddress, Class rpcServerClass) {
+    public RpcServer getRpcServer(String serverAddress, Class rpcServerClass) 
+            throws NoSuchMethodException, InvocationTargetException{
         try {
-            RpcServer rpcServer = (RpcServer)rpcServerClass.newInstance();   
-            return rpcServer;         
+            RpcServer rpcServer = (RpcServer)rpcServerClass.newInstance(); 
+            Class[] args = {String.class};
+            Constructor constructor = rpcServerClass.getConstructor(args);
+            Object[] parms = {serverAddress};
+            return (RpcServer)constructor.newInstance(parms);        
         } catch (IllegalAccessException e) {
             //TODO:
         } catch (InstantiationException e) {

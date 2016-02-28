@@ -39,7 +39,7 @@
         <dependency org="junit" name="junit" rev="4.11" />
         
         <!-- netty -->
-        <dependency org="io.netty" name="netty" rev="3.10.5.Final" />   
+        <dependency org="io.netty" name="netty-all" rev="4.0.0.Final" />   
         
         <!-- zookeeper -->        
         <dependency org="org.apache.zookeeper" name="zookeeper" rev="3.4.6" conf="api->master"/> 
