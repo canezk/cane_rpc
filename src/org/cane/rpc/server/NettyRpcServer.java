@@ -6,13 +6,14 @@
  */
 package org.cane.rpc.server;
 
-import java.net.Socket;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cane.rpc.servicectrl.ServiceRegistry;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -27,11 +28,26 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 public class NettyRpcServer extends RpcServer{
     private static final Log LOG = LogFactory.getLog(NettyRpcServer.class);
     
+    private ServiceRegistry serviceRegistry;
+    
     private EventLoopGroup bossGroup;
     private EventLoopGroup workGroup;
 
     public NettyRpcServer(String serverAddress) {
         this.serverAddress = serverAddress;
+    }
+    
+    public NettyRpcServer(String serverAddress, ServiceRegistry serviceRegistry) {
+        this.serverAddress = serverAddress;
+        this.serviceRegistry = serviceRegistry;
+    }
+    
+    /**
+     * setter for serviceregistry
+     * @param serviceRegistry
+     */
+    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
+        this.serviceRegistry = serviceRegistry;
     }
     
     @Override
@@ -45,12 +61,20 @@ public class NettyRpcServer extends RpcServer{
             serverBootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 public void initChannel(SocketChannel channel) throws Exception {
-                    channel.pipeline().addLast(null);
-                    //TODO
+                    channel.pipeline().addLast();
                 }
             });
+            serverBootstrap.option(ChannelOption.SO_BACKLOG, 128);
+            serverBootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
             String[] hostAndPort = serverAddress.split(":");
-            serverBootstrap.bind(hostAndPort[0], Integer.parseInt(hostAndPort[1]));
+            
+            ChannelFuture future = serverBootstrap.bind(hostAndPort[0], Integer.parseInt(hostAndPort[1])).sync();
+            
+            if(serviceRegistry != null) {
+                serviceRegistry.registerServer(serverAddress);
+            }
+            
+            future.channel().closeFuture().sync();            
         } catch(Exception e) {
             LOG.error("Init rpc server error!", e);
         }
